@@ -69,6 +69,7 @@ express-resource-new also supports a special action, `all`, that gets called for
 
     module.exports = {
       options: {
+        prefix: 'api', //Add a prefix to your resource routes
         root: true, // Creates resource on the root path (overrides name)
         name: 'posts', // Overrides module name (folder name)
         id: 'id', // Overrides the default id from singular form of `name`

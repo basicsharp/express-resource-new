@@ -96,6 +96,7 @@ var Resource = module.exports = function Resource(app, name, options) {
   this.before = options.before;
   this.name = options.name || name;
   this.root = options.root || false;
+  this.prefix = this._prefix(options.prefix);
   this.base = this._base();
   
   this.id = options.id || this._defaultId();
@@ -160,6 +161,30 @@ $(Resource.prototype, {
         ._record(action, method, path);
     });
   },
+
+  /**
+   * Normalize the prefix.
+   * 
+   * @return {String}
+   */
+
+  _prefix: function(prefix) {
+    if (!prefix) {
+      return '';
+    }
+
+    // remove a leading slash
+    if (prefix[0] === '/') {
+      prefix = prefix.substr(0, prefix.length - 1);
+    }
+
+    // Make sure we have a trailing slash
+    if (prefix[prefix.length-1] !== '/') {
+      prefix += '/'
+    }
+
+    return prefix;
+  },
   
   /**
    * Return the resource's default id string.
@@ -182,9 +207,9 @@ $(Resource.prototype, {
     var base;
     
     if('_base' in this.app && this.app._base && this.app._base.length > 0) {
-      base = this.app._base + '/' + this.name;
+      base = this.app._base + this.prefix + '/' + this.name;
     } else {
-      base = '/' + (this.root ? '' : this.name);
+      base = this.prefix + '/' + (this.root ? '' : this.name);
     }
     
     return base;
