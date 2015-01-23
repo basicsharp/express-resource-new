@@ -97,6 +97,8 @@ var Resource = module.exports = function Resource(app, name, options) {
   this.name = options.name || name;
   this.root = options.root || false;
   this.prefix = this._prefix(options.prefix);
+
+  console.log('PREFIX', this.prefix);
   this.base = this._base();
   
   this.id = options.id || this._defaultId();
@@ -170,17 +172,17 @@ $(Resource.prototype, {
 
   _prefix: function(prefix) {
     if (!prefix) {
-      return '';
+      return '/';
     }
 
-    // remove a leading slash
-    if (prefix[0] === '/') {
-      prefix = prefix.substr(0, prefix.length - 1);
+    // Make sure we have a leading slash
+    if (prefix[0] !== '/') {
+      prefix = '/' + prefix;
     }
 
     // Make sure we have a trailing slash
     if (prefix[prefix.length-1] !== '/') {
-      prefix += '/'
+      prefix = prefix + '/'
     }
 
     return prefix;
@@ -207,9 +209,9 @@ $(Resource.prototype, {
     var base;
     
     if('_base' in this.app && this.app._base && this.app._base.length > 0) {
-      base = this.app._base + this.prefix + '/' + this.name;
+      base = this.app._base + this.prefix + this.name;
     } else {
-      base = this.prefix + '/' + (this.root ? '' : this.name);
+      base = this.prefix + (this.root ? '' : this.name);
     }
     
     return base;
