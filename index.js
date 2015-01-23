@@ -98,7 +98,6 @@ var Resource = module.exports = function Resource(app, name, options) {
   this.root = options.root || false;
   this.prefix = this._prefix(options.prefix);
 
-  console.log('PREFIX', this.prefix);
   this.base = this._base();
   
   this.id = options.id || this._defaultId();
