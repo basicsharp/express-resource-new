@@ -74,7 +74,7 @@ function httpMethod(self, method, base) {
     path += action + ".:format?";
       
     if(self.before && action in self.before) {
-      before = self.before[action];
+      before = [].concat(self.before[action]);
     }
     
     self._map(method, path, before, callback)
@@ -111,18 +111,31 @@ var Resource = module.exports = function Resource(app, name, options) {
   this.member = member;
   this.collection = collection;
   this.routes = [];
+
+  if ( options.load )
+  {
+    this._addResourceLoader(options.load);
+  }
 };
 
 $(Resource.prototype, {
   
   /**
-   * Configure the default actions.
+   * initialize the resource object.
    * 
    * @param {Object} actions
    */
   
   _init: function(actions) {
     this.actions = actions;
+  },
+
+  /**
+   * Configure the default actions.
+   *
+   */
+
+  _defaultMapping: function(){
     var self = this;
     
     orderedActions.forEach(function(action) {
@@ -229,6 +242,29 @@ $(Resource.prototype, {
       path: path
     });
   },
+
+ /**
+   * Adds middleware to provide a universal resource
+   * loader for routes that contain the resource :id. This
+   * will populate the req.[param] with the object returned from
+   * the loading function provided in the controller
+   *
+   * @param {Function} loaderFn
+   */
+   _addResourceLoader: function(loaderFn) {
+    var id = this.id;
+    this.app.param(this.id, function(req, res, next) {
+      function callback(err, obj) {
+        if (err) return next(err);
+
+        if ( null === obj ) return res.send(404);
+        req[id] = obj;
+        next();
+      }
+
+      loaderFn(req, req.params[id], callback);
+    });
+   },
   
   /**
    * Sets all the appropriate variables for nesting
@@ -392,6 +428,7 @@ var methods = {
     if('function' == typeof callback) {
       resource._nest(callback);
     }
+    resource._defaultMapping();
     
     return resource;
   }
