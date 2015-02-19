@@ -7,13 +7,14 @@
     "url": "https://github.com/bessemeralliance/express-resource-new"
   },
   "author": "TJ Peden <tj.peden@tj-coding.com>",
-  "dependencies": { 
-    "lingo": "^0.0.4",
-    "methods": "^1.0.0"
+  "dependencies": {
+    "lingo": "0.0.5",
+    "methods": "^1.0.1"
   },
   "devDependencies": {
+    "debug": "^1.0.0",
     "connect": "*",
-    "express": "^3.0.0",
+    "express": "^4.4.1",
     "mocha": "*",
     "should": "*"
   },
