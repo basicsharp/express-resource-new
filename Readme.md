@@ -26,7 +26,7 @@ In your main application file (i.e. app.js or server.js) just add the following:
 
 Now in the `./controllers` directory you can put your "controllers" with one or more of the supported actions as follows:
 
-`./controllers/articles/index.js`:
+`./controllers/articles.js`:
 
     module.exports = {
       index: function(request, response) {
@@ -103,7 +103,7 @@ Lastly just call `app.resource()` with your controller name. Nesting is done by 
 
 You can also create non-standard RESTful routes.
 
-`./controllers/comments/index.js`:
+`./controllers/comments.js`:
 
     module.exports = {
       index: function(request, response) {

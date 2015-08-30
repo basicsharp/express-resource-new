@@ -419,6 +419,7 @@ var methods = {
     
     this._trail = this._trail || [];
     this.resources = this.resources || {};
+    name = this._stripExtension(name);
     var controller = this._load(name);
     var resource = new Resource(this, name, $({}, controller.options, options));
     
@@ -431,6 +432,12 @@ var methods = {
     resource._defaultMapping();
     
     return resource;
+  },
+
+  _stripExtension: function(name) {
+    var extIndex = name.lastIndexOf('.');
+    name = name.substring(0, extIndex != -1 ? extIndex : name.length);
+    return name;
   }
 };
 
